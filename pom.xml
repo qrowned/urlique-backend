@@ -20,6 +20,17 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>qrowned-releases</id>
+            <url>https://repo.qrowned.dev/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>qrowned-snapshots</id>
+            <url>https://repo.qrowned.dev/repository/maven-snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

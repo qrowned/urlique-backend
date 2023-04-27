@@ -186,3 +186,5 @@ UtilCommand.java
 upload.bat
 
 *.iml
+
+*.properties
