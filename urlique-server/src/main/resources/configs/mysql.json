@@ -1,0 +1,9 @@
+{
+  "hostname": "localhost",
+  "port": 3306,
+  "username": "urlique",
+  "password": "YOUR_PASSWORD",
+  "database": "urlique",
+  "minIdle": 3,
+  "maxPoolSize": 50
+}

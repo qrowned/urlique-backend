@@ -14,9 +14,9 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}\src\main\resources</directory>
-            <outputDirectory>\config</outputDirectory>
+            <outputDirectory>\</outputDirectory>
             <includes>
-                <include>application.properties</include>
+                <include>.\configs\*</include>
             </includes>
         </fileSet>
         <fileSet>

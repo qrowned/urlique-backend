@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @NoArgsConstructor
-public final class MySqlConfig implements ConfigAdapter<MySqlConfig> {
+public final class MysqlConfig implements ConfigAdapter<MysqlConfig> {
 
     private String hostname;
     private int port;
@@ -19,7 +19,7 @@ public final class MySqlConfig implements ConfigAdapter<MySqlConfig> {
     private int maxPoolSize;
 
     @Override
-    public void reload(@NotNull MySqlConfig config) {
+    public void reload(@NotNull MysqlConfig config) {
         this.hostname = config.getHostname();
         this.port = config.getPort();
         this.database = config.getDatabase();
@@ -30,4 +30,3 @@ public final class MySqlConfig implements ConfigAdapter<MySqlConfig> {
     }
 
 }
-
