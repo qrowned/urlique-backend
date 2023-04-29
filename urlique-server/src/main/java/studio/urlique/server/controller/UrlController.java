@@ -20,36 +20,36 @@ public class UrlController {
     private final UrlDataService urlDataService;
 
     @Async
-    @GetMapping("{id}/**") // using "/**" to allow access with slash and without slash
-    public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
-        return this.urlDataService.fetchUrlDataEntry(id);
+    @GetMapping("{id}") // using "/**" to allow access with slash and without slash
+    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, Principal principal) {
+        return this.urlDataService.fetchUrlDataEntry(id, principal);
     }
 
     @Async
-    @GetMapping("list/")
+    @GetMapping("list")
     public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
-                                                         @RequestParam(defaultValue = "1") int page) {
-        return this.urlDataService.fetchUrlDataEntries(pageSize, page);
+                                                         @RequestParam(defaultValue = "1") int page,
+                                                         Principal principal) {
+        return this.urlDataService.fetchUrlDataEntries(principal, pageSize, page);
     }
 
     @Async
-    @PostMapping("create/")
-    public Future<RequestResult<UrlData>> create(@RequestParam URI url,
-                                                 @RequestHeader("API-KEY") String apiKey) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), apiKey);
+    @PostMapping("create")
+    public Future<RequestResult<UrlData>> create(@RequestParam URI url, Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal.getName());
     }
 
     @Async
-    @PostMapping("createWithId/")
+    @PostMapping("createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
-                                                 @RequestHeader("API-KEY") String apiKey) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), apiKey);
+                                                 Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal.getName());
     }
 
     @Async
-    @DeleteMapping("delete/")
-    public void delete(@RequestParam String id) {
-        this.urlDataService.deleteUrlDataEntry(id);
+    @DeleteMapping("delete")
+    public Future<RequestResult<UrlData>> delete(@RequestParam String id, Principal principal) {
+        return this.urlDataService.deleteUrlDataEntry(id, principal);
     }
 
 }
