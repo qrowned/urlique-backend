@@ -1,18 +1,28 @@
 package studio.urlique.api.url;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.cloud.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import studio.urlique.api.database.DocumentId;
 
-import java.time.Instant;
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UrlData {
 
-public record UrlData(@NotNull String id,
-                      @NotNull String url,
-                      @NotNull Instant createdAt,
-                      @NotNull String creator) {
+    @DocumentId
+    private String id;
+    private String url;
+    private Timestamp createdAt;
+    private String creator;
 
-    public UrlData(@NotNull String id,
-                   @NotNull String url,
-                   @NotNull String creator) {
-        this(id, url, Instant.now(), creator);
+    public UrlData(String id,
+                   String url,
+                   String creator) {
+        this.id = id;
+        this.url = url;
+        this.creator = creator;
+        this.createdAt = Timestamp.now();
     }
-
 }
