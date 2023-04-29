@@ -2,8 +2,8 @@ package studio.urlique.server.url.transformer;
 
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import studio.urlique.api.url.UrlData;
 import studio.urlique.api.database.DataTransformer;
+import studio.urlique.api.url.UrlData;
 
 import java.sql.ResultSet;
 

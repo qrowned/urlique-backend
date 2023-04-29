@@ -10,7 +10,6 @@ import studio.urlique.server.url.UrlDataService;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @RestController
