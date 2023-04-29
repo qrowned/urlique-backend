@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import studio.urlique.api.RequestResult;
 import studio.urlique.api.url.UrlData;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 

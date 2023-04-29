@@ -13,15 +13,15 @@ import java.io.IOException;
 @Configuration
 public class FireStoreConfig {
 
-	@Bean
-	public Firestore getFireStore(@Value("${firebase.credential.path}") String credentialPath) throws IOException {
-		var serviceAccount = new FileInputStream(credentialPath);
-		var credentials = GoogleCredentials.fromStream(serviceAccount);
+    @Bean
+    public Firestore getFireStore(@Value("${firebase.credential.path}") String credentialPath) throws IOException {
+        var serviceAccount = new FileInputStream(credentialPath);
+        var credentials = GoogleCredentials.fromStream(serviceAccount);
 
-		var options = FirestoreOptions.newBuilder()
-						.setCredentials(credentials).build();
+        var options = FirestoreOptions.newBuilder()
+                .setCredentials(credentials).build();
 
-		return options.getService();
-	}
+        return options.getService();
+    }
 
 }

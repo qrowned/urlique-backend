@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -111,7 +114,7 @@ public abstract class AbstractFirestoreRepository<T> {
         return null;
     }
 
-    protected  <V> CompletableFuture<V> toCompletableFuture(ApiFuture<V> apiFuture) {
+    protected <V> CompletableFuture<V> toCompletableFuture(ApiFuture<V> apiFuture) {
         final CompletableFuture<V> cf = new CompletableFuture<>();
         ApiFutures.addCallback(apiFuture,
                 new ApiFutureCallback<>() {
