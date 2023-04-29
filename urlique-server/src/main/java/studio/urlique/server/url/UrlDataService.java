@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import studio.urlique.api.RequestResult;
 import studio.urlique.api.url.UrlData;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -37,6 +38,11 @@ public final class UrlDataService {
             if (urlData == null) return RequestResult.error("url.id.notFound");
             return RequestResult.ok(urlData);
         });
+    }
+
+    public CompletableFuture<RequestResult<List<UrlData>>> fetchUrlDataEntries(int pageSize, int page) {
+        if (pageSize > 50) return CompletableFuture.completedFuture(RequestResult.error("url.pageSize.tooLarge"));
+        return this.urlDataHandler.fetchAllUrlData(pageSize, page).thenApplyAsync(RequestResult::ok);
     }
 
     public void deleteUrlDataEntry(@NotNull String id) {

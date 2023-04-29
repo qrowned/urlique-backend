@@ -9,6 +9,8 @@ import studio.urlique.server.url.UrlDataService;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @RestController
@@ -21,6 +23,13 @@ public class UrlController {
     @GetMapping("{id}/**") // using "/**" to allow access with slash and without slash
     public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
         return this.urlDataService.fetchUrlDataEntry(id);
+    }
+
+    @Async
+    @GetMapping("list/")
+    public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
+                                                         @RequestParam(defaultValue = "1") int page) {
+        return this.urlDataService.fetchUrlDataEntries(pageSize, page);
     }
 
     @Async

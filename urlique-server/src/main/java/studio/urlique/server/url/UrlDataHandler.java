@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+import studio.urlique.api.Cacheable;
 import studio.urlique.api.database.AsyncDataSource;
 import studio.urlique.api.url.UrlData;
 import studio.urlique.server.url.transformer.UrlDataTransformer;
@@ -15,12 +16,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public final class UrlDataHandler {
+public final class UrlDataHandler implements Cacheable<String, UrlData> {
 
     private static final UrlDataTransformer DATA_TRANSFORMER = new UrlDataTransformer();
 
     private static final String FETCH_STATEMENT = "select * from url_data where id = ?;";
-    private static final String FETCH_ALL_STATEMENT = "select * from url_data;";
+    private static final String FETCH_ALL_STATEMENT = "select * from url_data " +
+            "order by createdAt desc " +
+            "limit ?,?;";
 
     private static final String INSERT_STATEMENT = "insert into url_data(id, url, creator) values (?, ?, ?);";
     private static final String DELETE_STATEMENT = "delete from url_data where id = ?;";
@@ -43,8 +46,11 @@ public final class UrlDataHandler {
         return this.accountAsyncLoadingCache.get(id);
     }
 
-    public CompletableFuture<List<UrlData>> fetchAllUrlData(@NotNull String id) {
+    @SneakyThrows
+    public CompletableFuture<List<UrlData>> fetchAllUrlData(int limit, int page) {
         PreparedStatement preparedStatement = this.dataSource.prepare(FETCH_ALL_STATEMENT);
+        preparedStatement.setInt(1, limit * (page - 1));
+        preparedStatement.setInt(2, limit * page);
         return this.dataSource.queryAll(preparedStatement, DATA_TRANSFORMER);
     }
 
