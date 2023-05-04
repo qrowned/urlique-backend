@@ -1,6 +1,8 @@
 package studio.urlique.server.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import studio.urlique.api.RequestResult;
@@ -9,46 +11,47 @@ import studio.urlique.server.url.UrlDataService;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.Future;
 
-@RestController
+@RestController("/")
 @RequiredArgsConstructor
 public class UrlController {
 
     private final UrlDataService urlDataService;
 
     @Async
-    @GetMapping("{id}/**") // using "/**" to allow access with slash and without slash
-    public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
-        return this.urlDataService.fetchUrlDataEntry(id);
+    @GetMapping("{id}") // using "/**" to allow access with slash and without slash
+    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, @NotNull Principal principal) {
+        return this.urlDataService.fetchUrlDataEntry(id, principal);
     }
 
     @Async
-    @GetMapping("list/")
+    @GetMapping("list")
     public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
-                                                         @RequestParam(defaultValue = "1") int page) {
-        return this.urlDataService.fetchUrlDataEntries(pageSize, page);
+                                                         @RequestParam(defaultValue = "1") int page,
+                                                         Principal principal) {
+        return this.urlDataService.fetchUrlDataEntries(principal, pageSize, page);
     }
 
     @Async
-    @PostMapping("create/")
-    public Future<RequestResult<UrlData>> create(@RequestParam URI url,
-                                                 @RequestHeader("API-KEY") String apiKey) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), apiKey);
+    @PostMapping("create")
+    public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
     }
 
     @Async
-    @PostMapping("createWithId/")
+    @PostMapping("createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
-                                                 @RequestHeader("API-KEY") String apiKey) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), apiKey);
+                                                 @NotNull Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
     }
 
     @Async
-    @DeleteMapping("delete/")
-    public void delete(@RequestParam String id) {
-        this.urlDataService.deleteUrlDataEntry(id);
+    @DeleteMapping("delete")
+    public Future<RequestResult<UrlData>> delete(@RequestParam String id, Principal principal) {
+        return this.urlDataService.deleteUrlDataEntry(id, principal);
     }
 
 }
