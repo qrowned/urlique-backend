@@ -3,6 +3,7 @@ package studio.urlique.server.url;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import studio.urlique.api.RequestResult;
 import studio.urlique.api.url.UrlData;
@@ -18,17 +19,17 @@ public final class UrlDataService {
     private final UrlDataFirestoreRepository urlDataFirestoreRepository;
 
     public CompletableFuture<RequestResult<UrlData>> createUrlDataEntry(@NotNull String url,
-                                                                        @NotNull String creator) {
-        return this.createUrlDataEntry(RandomStringUtils.randomAlphanumeric(5), url, creator);
+                                                                        @Nullable Principal creator) {
+        return this.createUrlDataEntry(RandomStringUtils.randomAlphanumeric(6), url, creator);
     }
 
     public CompletableFuture<RequestResult<UrlData>> createUrlDataEntry(@NotNull String id,
                                                                         @NotNull String url,
-                                                                        @NotNull String creator) {
+                                                                        @Nullable Principal creator) {
         return this.urlDataFirestoreRepository.get(id).thenComposeAsync(existingData -> {
             if (existingData.isPresent()) return this.createUrlDataEntry(url, creator);
 
-            UrlData urlData = new UrlData(id, url, creator);
+            UrlData urlData = new UrlData(id, url, creator == null ? null : creator.getName());
             this.urlDataFirestoreRepository.save(urlData);
             return CompletableFuture.supplyAsync(() -> RequestResult.ok(urlData));
         });
@@ -39,7 +40,8 @@ public final class UrlDataService {
             if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
 
             UrlData urlData = urlDataOptional.get();
-            if (!urlData.getCreator().equals(creator.getName())) return RequestResult.error("url.action.noPermission");
+            if (urlData.equalsCreator(creator.getName()))
+                return RequestResult.error("url.action.noPermission");
 
             return RequestResult.ok(urlData);
         });
@@ -55,7 +57,8 @@ public final class UrlDataService {
             if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
 
             UrlData urlData = urlDataOptional.get();
-            if (!urlData.getCreator().equals(creator.getName())) return RequestResult.error("url.action.noPermission");
+            if (urlData.equalsCreator(creator.getName()))
+                return RequestResult.error("url.action.noPermission");
 
             this.urlDataFirestoreRepository.delete(id);
             return RequestResult.ok(urlData);

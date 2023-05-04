@@ -1,6 +1,8 @@
 package studio.urlique.server.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import studio.urlique.api.RequestResult;
@@ -13,7 +15,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.Future;
 
-@RestController
+@RestController("/")
 @RequiredArgsConstructor
 public class UrlController {
 
@@ -21,7 +23,7 @@ public class UrlController {
 
     @Async
     @GetMapping("{id}") // using "/**" to allow access with slash and without slash
-    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, Principal principal) {
+    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, @NotNull Principal principal) {
         return this.urlDataService.fetchUrlDataEntry(id, principal);
     }
 
@@ -35,15 +37,15 @@ public class UrlController {
 
     @Async
     @PostMapping("create")
-    public Future<RequestResult<UrlData>> create(@RequestParam URI url, Principal principal) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal.getName());
+    public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
     }
 
     @Async
     @PostMapping("createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
-                                                 Principal principal) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal.getName());
+                                                 @NotNull Principal principal) throws MalformedURLException {
+        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
     }
 
     @Async
