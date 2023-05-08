@@ -1,7 +1,6 @@
 package studio.urlique.server.user;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +13,14 @@ public class UserService {
 
     private final FirebaseAuth firebaseAuth;
 
-    public void setUserClaims(String uid, List<Permission> requestedPermissions) throws FirebaseAuthException {
-        List<String> permissions = requestedPermissions
+    public void setUserRole(String uid, List<UserRole> requestedUserRoles) {
+        List<String> permissions = requestedUserRoles
                 .stream()
                 .map(Enum::toString).toList();
 
-        Map<String, Object> claims = Map.of("custom_claims", permissions);
+        Map<String, Object> claims = Map.of("role", permissions);
 
-        this.firebaseAuth.setCustomUserClaims(uid, claims);
+        this.firebaseAuth.setCustomUserClaimsAsync(uid, claims);
     }
 
 }
