@@ -40,7 +40,7 @@ public final class UrlDataService {
             if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
 
             UrlData urlData = urlDataOptional.get();
-            if (urlData.equalsCreator(creator.getName()))
+            if (!urlData.equalsCreator(creator.getName()))
                 return RequestResult.error("url.action.noPermission");
 
             return RequestResult.ok(urlData);
