@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 import studio.urlique.api.database.AbstractFirestoreRepository;
 import studio.urlique.api.url.UrlData;
+import studio.urlique.api.utils.FutureUtils;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -32,7 +33,7 @@ public class UrlDataFirestoreRepository extends AbstractFirestoreRepository<UrlD
         query = query.limit(size)
                 .offset((page - 1) * size);
 
-        return super.toCompletableFuture(query.get()).thenApplyAsync(queryDocumentSnapshots -> {
+        return FutureUtils.toCompletableFuture(query.get()).thenApplyAsync(queryDocumentSnapshots -> {
             return queryDocumentSnapshots.toObjects(UrlData.class);
         });
     }

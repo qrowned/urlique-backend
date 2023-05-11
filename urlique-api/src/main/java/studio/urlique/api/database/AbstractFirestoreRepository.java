@@ -1,12 +1,10 @@
 package studio.urlique.api.database;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
-import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.*;
-import com.google.common.util.concurrent.MoreExecutors;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
+import studio.urlique.api.utils.FutureUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -38,7 +36,7 @@ public abstract class AbstractFirestoreRepository<T> {
         String documentId = getDocumentId(model);
         ApiFuture<WriteResult> resultApiFuture = this.collectionReference.document(documentId).set(model);
 
-        return this.toCompletableFuture(resultApiFuture).thenApplyAsync(writeResult -> {
+        return FutureUtils.toCompletableFuture(resultApiFuture).thenApplyAsync(writeResult -> {
             if (writeResult == null) {
                 log.error("Error saving {}={}", this.collectionName, documentId);
                 return false;
@@ -61,7 +59,7 @@ public abstract class AbstractFirestoreRepository<T> {
     public CompletableFuture<List<T>> retrieveAll() {
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = this.collectionReference.get();
 
-        return this.toCompletableFuture(querySnapshotApiFuture).thenApplyAsync(querySnapshot -> {
+        return FutureUtils.toCompletableFuture(querySnapshotApiFuture).thenApplyAsync(querySnapshot -> {
             List<QueryDocumentSnapshot> queryDocumentSnapshots = querySnapshot.getDocuments();
 
             return queryDocumentSnapshots.stream()
@@ -75,7 +73,7 @@ public abstract class AbstractFirestoreRepository<T> {
         DocumentReference documentReference = this.collectionReference.document(documentId);
         ApiFuture<DocumentSnapshot> documentSnapshotApiFuture = documentReference.get();
 
-        return this.toCompletableFuture(documentSnapshotApiFuture).thenApplyAsync(documentSnapshot -> {
+        return FutureUtils.toCompletableFuture(documentSnapshotApiFuture).thenApplyAsync(documentSnapshot -> {
             return documentSnapshot.exists() ? Optional.ofNullable(documentSnapshot.toObject(this.parameterizedType)) : Optional.empty();
         });
     }
@@ -112,24 +110,6 @@ public abstract class AbstractFirestoreRepository<T> {
             log.error("Error in getting documentId key", e);
         }
         return null;
-    }
-
-    protected <V> CompletableFuture<V> toCompletableFuture(ApiFuture<V> apiFuture) {
-        final CompletableFuture<V> cf = new CompletableFuture<>();
-        ApiFutures.addCallback(apiFuture,
-                new ApiFutureCallback<>() {
-                    @Override
-                    public void onFailure(Throwable t) {
-                        cf.completeExceptionally(t);
-                    }
-
-                    @Override
-                    public void onSuccess(V result) {
-                        cf.complete(result);
-                    }
-                },
-                MoreExecutors.directExecutor());
-        return cf;
     }
 
 }

@@ -1,5 +1,6 @@
 package studio.urlique.api.url;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.cloud.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,10 +28,6 @@ public class UrlData {
         this.url = url;
         this.creator = creator;
         this.createdAt = Timestamp.now();
-    }
-
-    public Optional<String> getCreator() {
-        return Optional.ofNullable(this.creator);
     }
 
     public boolean equalsCreator(@NotNull String creator) {
