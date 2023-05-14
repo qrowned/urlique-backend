@@ -20,6 +20,13 @@ public class UserService {
 
     private final FirebaseAuth firebaseAuth;
 
+    /**
+     * Add a {@link UserRole} to a Firebase user.
+     *
+     * @param uid unique ID of the Firebase user.
+     * @param requestedUserRole requested role which should be added.
+     * @return result of the user update.
+     */
     public CompletableFuture<RequestResult<UserRecord>> addUserRole(String uid, UserRole requestedUserRole) {
         return this.fetchUserRecord(uid).thenComposeAsync(userRecordResult -> {
             if (!userRecordResult.isSuccess())
@@ -39,6 +46,13 @@ public class UserService {
         });
     }
 
+    /**
+     * Remove a {@link UserRole} from a Firebase user.
+     *
+     * @param uid unique ID of the Firebase user.
+     * @param requestedUserRole requested role which should be removed.
+     * @return result of the user update.
+     */
     public CompletableFuture<RequestResult<UserRecord>> removeUserRole(String uid, UserRole requestedUserRole) {
         return this.fetchUserRecord(uid).thenComposeAsync(userRecordResult -> {
             if (!userRecordResult.isSuccess())
@@ -55,6 +69,13 @@ public class UserService {
         });
     }
 
+    /**
+     * Update the internal Firebase user claims.
+     *
+     * @param uid unique ID of the Firebase user.
+     * @param claims map of all the user claims.
+     * @return result of the user update.
+     */
     private CompletableFuture<RequestResult<UserRecord>> updateUserClaims(String uid, Map<String, Object> claims) {
         return FutureUtils.toCompletableFuture(this.firebaseAuth.setCustomUserClaimsAsync(uid, claims))
                 .thenComposeAsync(unused ->
@@ -63,6 +84,13 @@ public class UserService {
                 );
     }
 
+    /**
+     * Fetch a certain record of a Firebase user.
+     * "record" means general information from Firebase AUTH.
+     *
+     * @param uid unique ID of the Firebase user.
+     * @return result of the fetch request.
+     */
     public CompletableFuture<RequestResult<UserRecord>> fetchUserRecord(@NotNull String uid) {
         return FutureUtils.toCompletableFuture(this.firebaseAuth.getUserAsync(uid))
                 .thenApplyAsync(userRecord -> {
