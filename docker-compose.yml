@@ -1,5 +1,5 @@
 services:
-  account_service:
+  urlique-server:
     build: ./urlique-server
     ports:
       - 8085:8080

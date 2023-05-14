@@ -35,13 +35,11 @@ public final class UrlDataService {
         });
     }
 
-    public CompletableFuture<RequestResult<UrlData>> fetchUrlDataEntry(@NotNull String id, @NotNull Principal creator) {
+    public CompletableFuture<RequestResult<UrlData>> fetchUrlDataEntry(@NotNull String id) {
         return this.urlDataFirestoreRepository.get(id).thenApplyAsync(urlDataOptional -> {
             if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
 
             UrlData urlData = urlDataOptional.get();
-            if (!urlData.equalsCreator(creator.getName()))
-                return RequestResult.error("url.action.noPermission");
 
             return RequestResult.ok(urlData);
         });

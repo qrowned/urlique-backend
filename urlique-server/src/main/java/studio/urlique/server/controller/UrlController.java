@@ -24,8 +24,8 @@ public class UrlController {
 
     @Async
     @GetMapping("/{id}") // using "/**" to allow access with slash and without slash
-    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, @NotNull Principal principal) {
-        return this.urlDataService.fetchUrlDataEntry(id, principal);
+    public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
+        return this.urlDataService.fetchUrlDataEntry(id);
     }
 
     @Async
