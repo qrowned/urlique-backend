@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/url/create").permitAll()
-                            .requestMatchers("/admin/**").permitAll()
+                            .requestMatchers("/admin/user/**").hasAuthority("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauthResourceServer ->
