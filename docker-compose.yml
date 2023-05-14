@@ -1,0 +1,8 @@
+services:
+  account_service:
+    build: ./urlique-server
+    ports:
+      - 8085:8080
+    volumes:
+      - ./configs/application.properties:/app/application.properties
+      - ./configs:/app/configs/

@@ -15,20 +15,21 @@ import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.Future;
 
-@RestController("/")
+@RestController
+@RequestMapping("/url")
 @RequiredArgsConstructor
 public class UrlController {
 
     private final UrlDataService urlDataService;
 
     @Async
-    @GetMapping("{id}") // using "/**" to allow access with slash and without slash
+    @GetMapping("/{id}") // using "/**" to allow access with slash and without slash
     public Future<RequestResult<UrlData>> fetch(@PathVariable String id, @NotNull Principal principal) {
         return this.urlDataService.fetchUrlDataEntry(id, principal);
     }
 
     @Async
-    @GetMapping("list")
+    @GetMapping("/list")
     public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
                                                          @RequestParam(defaultValue = "1") int page,
                                                          Principal principal) {
@@ -36,20 +37,20 @@ public class UrlController {
     }
 
     @Async
-    @PostMapping("create")
+    @PostMapping("/create")
     public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) throws MalformedURLException {
         return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
     }
 
     @Async
-    @PostMapping("createWithId")
+    @PostMapping("/createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
                                                  @NotNull Principal principal) throws MalformedURLException {
         return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
     }
 
     @Async
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     public Future<RequestResult<UrlData>> delete(@RequestParam String id, Principal principal) {
         return this.urlDataService.deleteUrlDataEntry(id, principal);
     }
