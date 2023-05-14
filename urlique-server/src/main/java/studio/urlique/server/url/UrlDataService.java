@@ -56,9 +56,7 @@ public final class UrlDataService {
      */
     public CompletableFuture<RequestResult<UrlData>> fetchUrlDataEntry(@NotNull String id) {
         return this.urlDataFirestoreRepository.get(id).thenApplyAsync(urlDataOptional -> {
-            if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
-
-            return RequestResult.ok(urlDataOptional.get());
+            return urlDataOptional.map(RequestResult::ok).orElseGet(() -> RequestResult.error("url.id.notFound"));
         });
     }
 
@@ -90,7 +88,7 @@ public final class UrlDataService {
             if (urlDataOptional.isEmpty()) return RequestResult.error("url.id.notFound");
 
             UrlData urlData = urlDataOptional.get();
-            if (urlData.equalsCreator(principal.getName()))
+            if (!urlData.equalsCreator(principal.getName()))
                 return RequestResult.error("url.action.noPermission");
 
             this.urlDataFirestoreRepository.delete(id);

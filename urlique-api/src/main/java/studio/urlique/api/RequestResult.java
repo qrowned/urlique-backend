@@ -26,10 +26,24 @@ public final class RequestResult<T> implements Serializable {
         this.message = message;
     }
 
+    /**
+     * Create a successful result with body.
+     *
+     * @param result body of result.
+     * @return result object of body.
+     * @param <T> type of the result.
+     */
     public static <T> RequestResult<T> ok(@NotNull T result) {
         return new RequestResult<>(result);
     }
 
+    /**
+     * Create a failed result with message.
+     *
+     * @param message error message.
+     * @return result object of error message.
+     * @param <T> type of the result.
+     */
     public static <T> RequestResult<T> error(@NotNull String message) {
         return new RequestResult<>(message);
     }

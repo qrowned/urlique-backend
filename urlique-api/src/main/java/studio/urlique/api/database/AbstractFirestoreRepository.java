@@ -14,6 +14,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract class for handling Firestore collections async.
+ *
+ * @param <T> document type of collection.
+ */
 @Slf4j
 public abstract class AbstractFirestoreRepository<T> {
 
@@ -32,6 +37,12 @@ public abstract class AbstractFirestoreRepository<T> {
         return (Class<T>) type.getActualTypeArguments()[0];
     }
 
+    /**
+     * Save data to Firebase collection.
+     *
+     * @param model data to save.
+     * @return state of the save request.
+     */
     public CompletableFuture<Boolean> save(T model) {
         String documentId = getDocumentId(model);
         ApiFuture<WriteResult> resultApiFuture = this.collectionReference.document(documentId).set(model);
@@ -47,15 +58,31 @@ public abstract class AbstractFirestoreRepository<T> {
         });
     }
 
+    /**
+     * Delete data by model object.
+     *
+     * @param model object to delete.
+     */
     public void delete(T model) {
         String documentId = getDocumentId(model);
         ApiFuture<WriteResult> resultApiFuture = this.collectionReference.document(documentId).delete();
     }
 
+    /**
+     * Delete data by document ID.
+     *
+     * @param documentId ID of document to delete.
+     */
     public void delete(String documentId) {
         ApiFuture<WriteResult> resultApiFuture = this.collectionReference.document(documentId).delete();
     }
 
+    /**
+     * Retrieve all data of collection.
+     * ATTENTION: Could cause memory overload on big collection.
+     *
+     * @return whole collection.
+     */
     public CompletableFuture<List<T>> retrieveAll() {
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = this.collectionReference.get();
 
@@ -69,6 +96,12 @@ public abstract class AbstractFirestoreRepository<T> {
     }
 
 
+    /**
+     * Get certain data by ID of document.
+     *
+     * @param documentId ID of the document to fetch.
+     * @return {@link Optional} of fetched data.
+     */
     public CompletableFuture<Optional<T>> get(String documentId) {
         DocumentReference documentReference = this.collectionReference.document(documentId);
         ApiFuture<DocumentSnapshot> documentSnapshotApiFuture = documentReference.get();
@@ -79,6 +112,12 @@ public abstract class AbstractFirestoreRepository<T> {
     }
 
 
+    /**
+     * Get document ID of data based on {@link DocumentId} annotation.
+     *
+     * @param t data to scan on for document ID.
+     * @return ID of document.
+     */
     protected String getDocumentId(T t) {
         Object key;
         Class<?> clzz = t.getClass();
