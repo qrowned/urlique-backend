@@ -1,6 +1,5 @@
 package studio.urlique.server.controller;
 
-import io.sentry.spring.jakarta.tracing.SentrySpan;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,14 +23,12 @@ public class UrlController {
     private final UrlDataService urlDataService;
 
     @Async
-    @SentrySpan
     @GetMapping("/{id}") // using "/**" to allow access with slash and without slash
     public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
         return this.urlDataService.fetchUrlDataEntry(id);
     }
 
     @Async
-    @SentrySpan
     @GetMapping("/list")
     public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
                                                          @RequestParam(defaultValue = "1") int page,
@@ -40,14 +37,12 @@ public class UrlController {
     }
 
     @Async
-    @SentrySpan
     @PostMapping("/create")
     public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) throws MalformedURLException {
         return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
     }
 
     @Async
-    @SentrySpan
     @PostMapping("/createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
                                                  @NotNull Principal principal) throws MalformedURLException {
@@ -55,7 +50,6 @@ public class UrlController {
     }
 
     @Async
-    @SentrySpan
     @DeleteMapping("/delete")
     public Future<RequestResult<UrlData>> delete(@RequestParam String id, Principal principal) {
         return this.urlDataService.deleteUrlDataEntry(id, principal);
