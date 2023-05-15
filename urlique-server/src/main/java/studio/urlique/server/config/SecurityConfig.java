@@ -19,18 +19,13 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
     @Bean
-    public CorsFilter corsFilter() {
-        return new CorsFilter();
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/url/create", "/url/{id}").permitAll()
+                            .requestMatchers("/url/create", "/url/{id}/info").permitAll()
                             .requestMatchers("/admin/user/**").hasAuthority("ADMIN")
                             .anyRequest().authenticated();
                 })
@@ -39,7 +34,6 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -53,6 +47,11 @@ public class SecurityConfig {
                         .collect(Collectors.toList())
         );
         return converter;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter();
     }
 
 }

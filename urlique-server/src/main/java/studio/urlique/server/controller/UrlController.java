@@ -23,7 +23,7 @@ public class UrlController {
     private final UrlDataService urlDataService;
 
     @Async
-    @GetMapping("/{id}") // using "/**" to allow access with slash and without slash
+    @GetMapping("/{id}/info") // using "/**" to allow access with slash and without slash
     public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
         return this.urlDataService.fetchUrlDataEntry(id);
     }
@@ -32,7 +32,7 @@ public class UrlController {
     @GetMapping("/list")
     public Future<RequestResult<List<UrlData>>> fetchAll(@RequestParam(defaultValue = "25") int pageSize,
                                                          @RequestParam(defaultValue = "1") int page,
-                                                         Principal principal) {
+                                                         @NotNull Principal principal) {
         return this.urlDataService.fetchUrlDataEntries(principal, pageSize, page);
     }
 
@@ -50,8 +50,8 @@ public class UrlController {
     }
 
     @Async
-    @DeleteMapping("/delete")
-    public Future<RequestResult<UrlData>> delete(@RequestParam String id, Principal principal) {
+    @DeleteMapping("{id}/delete")
+    public Future<RequestResult<UrlData>> delete(@PathVariable String id, @NotNull Principal principal) {
         return this.urlDataService.deleteUrlDataEntry(id, principal);
     }
 
