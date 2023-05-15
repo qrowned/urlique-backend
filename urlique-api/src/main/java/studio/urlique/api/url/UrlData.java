@@ -1,14 +1,11 @@
 package studio.urlique.api.url;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.cloud.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import studio.urlique.api.database.DocumentId;
-
-import java.util.Optional;
 
 @Getter
 @AllArgsConstructor

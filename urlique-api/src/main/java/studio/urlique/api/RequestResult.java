@@ -30,8 +30,8 @@ public final class RequestResult<T> implements Serializable {
      * Create a successful result with body.
      *
      * @param result body of result.
+     * @param <T>    type of the result.
      * @return result object of body.
-     * @param <T> type of the result.
      */
     public static <T> RequestResult<T> ok(@NotNull T result) {
         return new RequestResult<>(result);
@@ -41,8 +41,8 @@ public final class RequestResult<T> implements Serializable {
      * Create a failed result with message.
      *
      * @param message error message.
+     * @param <T>     type of the result.
      * @return result object of error message.
-     * @param <T> type of the result.
      */
     public static <T> RequestResult<T> error(@NotNull String message) {
         return new RequestResult<>(message);

@@ -31,8 +31,8 @@ public final class UrlDataService {
     /**
      * Create a URL data entry with specific ID.
      *
-     * @param id specific ID of short link.
-     * @param url URL the short link should point to.
+     * @param id        specific ID of short link.
+     * @param url       URL the short link should point to.
      * @param principal creator of the entry/request.
      * @return result of create request.
      */
@@ -64,9 +64,9 @@ public final class UrlDataService {
      * Fetch all URL data entries of a certain creator.
      * To prevent memory overload, a pagination system is implemented.
      *
-     * @param creator creator to get the URL data entries from.
+     * @param creator  creator to get the URL data entries from.
      * @param pageSize how many entries should be on one page.
-     * @param page specific page to fetch from.
+     * @param page     specific page to fetch from.
      * @return result of fetch request.
      */
     public CompletableFuture<RequestResult<List<UrlData>>> fetchUrlDataEntries(@NotNull Principal creator,
@@ -78,7 +78,7 @@ public final class UrlDataService {
     /**
      * Delete a specific URL data entry.
      *
-     * @param id ID of URL data entry which should be deleted.
+     * @param id        ID of URL data entry which should be deleted.
      * @param principal identity who executed the request.
      * @return result of delete request.
      */

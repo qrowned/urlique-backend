@@ -3,7 +3,6 @@ package studio.urlique.server.user;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import studio.urlique.api.RequestResult;
@@ -23,7 +22,7 @@ public class UserService {
     /**
      * Add a {@link UserRole} to a Firebase user.
      *
-     * @param uid unique ID of the Firebase user.
+     * @param uid               unique ID of the Firebase user.
      * @param requestedUserRole requested role which should be added.
      * @return result of the user update.
      */
@@ -49,7 +48,7 @@ public class UserService {
     /**
      * Remove a {@link UserRole} from a Firebase user.
      *
-     * @param uid unique ID of the Firebase user.
+     * @param uid               unique ID of the Firebase user.
      * @param requestedUserRole requested role which should be removed.
      * @return result of the user update.
      */
@@ -72,7 +71,7 @@ public class UserService {
     /**
      * Update the internal Firebase user claims.
      *
-     * @param uid unique ID of the Firebase user.
+     * @param uid    unique ID of the Firebase user.
      * @param claims map of all the user claims.
      * @return result of the user update.
      */
