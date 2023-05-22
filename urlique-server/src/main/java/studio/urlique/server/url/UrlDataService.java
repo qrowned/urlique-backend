@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import studio.urlique.api.RequestResult;
 import studio.urlique.api.url.UrlData;
+import studio.urlique.server.url.request.UrlRequestDataFirestoreRepository;
 
 import java.security.Principal;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public final class UrlDataService {
 
     private final UrlDataFirestoreRepository urlDataFirestoreRepository;
+    private final UrlRequestDataFirestoreRepository urlRequestDataFirestoreRepository;
 
     /**
      * Create a URL data entry without specific ID.
@@ -92,6 +94,7 @@ public final class UrlDataService {
                 return RequestResult.error("url.action.noPermission");
 
             this.urlDataFirestoreRepository.delete(id);
+            this.urlRequestDataFirestoreRepository.delete(id);
             return RequestResult.ok(urlData);
         });
     }
