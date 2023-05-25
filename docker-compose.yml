@@ -6,3 +6,4 @@ services:
     volumes:
       - ./configs/application.properties:/app/application.properties
       - ./configs:/app/configs/
+      - ./urlique-server/target/urlique-server-1.0-SNAPSHOT-application/urlique-server-1.0-SNAPSHOT/lib:/app/lib
