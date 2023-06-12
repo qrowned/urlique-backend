@@ -17,6 +17,7 @@ public class UrlData {
     private String url;
     private Timestamp createdAt;
     private String creator;
+    private long requests = 0;
 
     public UrlData(String id,
                    String url,
@@ -29,6 +30,10 @@ public class UrlData {
 
     public boolean equalsCreator(@NotNull String creator) {
         return this.creator != null && this.creator.equals(creator);
+    }
+
+    public void increaseRequest() {
+        requests++;
     }
 
 }
