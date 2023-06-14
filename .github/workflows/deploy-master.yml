@@ -19,8 +19,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./urlique_server/
-          file: ./urlique_server/docker/prod/Dockerfile
+          context: urlique_server/
+          file: urlique_server/docker/prod/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: '${{ secrets.REGISTRY_URL }}/urlique/server:latest'
