@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Represents a service for managing any user related data.
+ * Mostly Firebase {@link UserRecord}.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {

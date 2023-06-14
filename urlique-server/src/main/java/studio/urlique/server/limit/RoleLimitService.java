@@ -22,16 +22,34 @@ public final class RoleLimitService {
     private final UserService userService;
     private final Map<String, Bucket> bucketCache = new HashMap<>();
 
+    /**
+     * Resolve the Token {@link Bucket} for a {@link Principal}.
+     *
+     * @param principal the user principal.
+     * @return the resolved Bucket for the user (principal).
+     */
     public Bucket resolveBucket(@NotNull Principal principal) {
         return this.bucketCache.computeIfAbsent(principal.getName(), s ->
                 this.newBucket(principal)
         );
     }
 
+    /**
+     * Resolve the Token {@link Bucket} for an IP-Address.
+     *
+     * @param ipAddress the IP-Address.
+     * @return the resolved Bucket for the IP-Address.
+     */
     public Bucket resolveBucket(@NotNull String ipAddress) {
         return this.bucketCache.computeIfAbsent(ipAddress, s -> this.newAnonymousBucket());
     }
 
+    /**
+     * Create a new {@link Bucket} for a {@link Principal}.
+     *
+     * @param principal the user principal.
+     * @return the created Bucket.
+     */
     private Bucket newBucket(@NotNull Principal principal) {
         RequestResult<UserRecord> requestResult = this.userService.fetchUserRecord(principal.getName()).join();
         if (!requestResult.isSuccess())
@@ -42,6 +60,11 @@ public final class RoleLimitService {
                 .build();
     }
 
+    /**
+     * Create a new {@link Bucket} for an anonymous user.
+     *
+     * @return the created Bucket.
+     */
     private Bucket newAnonymousBucket() {
         return Bucket.builder()
                 .addLimit(Bandwidth.classic(10, Refill.intervally(10, Duration.ofMinutes(5))))

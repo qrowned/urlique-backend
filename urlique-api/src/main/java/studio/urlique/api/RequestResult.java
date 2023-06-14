@@ -6,6 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
+/**
+ * Represents a Result provided by the API/Server.
+ *
+ * @param <T> the type of the result body.
+ */
 @Getter
 @AllArgsConstructor
 public final class RequestResult<T> implements Serializable {

@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.Duration;
+import com.google.firebase.auth.UserRecord;
 
+/**
+ * Represents a Role of a Firebase {@link UserRecord}.
+ */
 @Getter
 @AllArgsConstructor
 public enum UserRole {
