@@ -39,7 +39,7 @@ public final class RateLimitFilter extends GenericFilterBean {
                 ? this.roleLimitService.resolveBucket(principal)
                 : this.roleLimitService.resolveBucket(ipAddress);
 
-        log.info("Received request from IP-Address <" + ipAddress + "> with " + bucket.getAvailableTokens() + " tokens left. (Signed in: " + (principal != null) + ")");
+        log.info("Received request from IP-Address " + ipAddress + " with " + bucket.getAvailableTokens() + " tokens left. (Signed in: " + (principal != null) + ")");
 
         ConsumptionProbe consumptionProbe = bucket.tryConsumeAndReturnRemaining(1);
         if (consumptionProbe.isConsumed()) {
