@@ -16,7 +16,6 @@ jobs:
           java-package: jdk
           java-version: '17'
       - name: Compile the Project
-        working-directory: github-actions-java-maven
         run: mvn -B compile
   build:
     runs-on: ubuntu-latest
