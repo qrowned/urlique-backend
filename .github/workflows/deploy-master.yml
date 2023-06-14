@@ -1,0 +1,29 @@
+name: Deploy Master
+on:
+  push:
+    branches: [ master ]
+jobs:
+  deploy:
+    needs: unit-tests
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to private registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./urlique_server/
+          file: ./urlique_server/docker/prod/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: '${{ secrets.REGISTRY_URL }}/urlique/server:latest'
+          cache-from: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/urlique/server:buildcache'
+          cache-to: 'type=registry,ref=${{ secrets.REGISTRY_URL }}/urlique/server:buildcache,mode=max'

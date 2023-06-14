@@ -1,6 +1,8 @@
 services:
   urlique-server:
-    build: ./urlique-server
+    build:
+      context: ./
+      dockerfile: ./urlique-server/docker/dev/Dockerfile
     ports:
       - 8085:8080
     volumes:
