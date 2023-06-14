@@ -1,7 +1,7 @@
 name: Deploy Master
 on:
   push:
-    branches: [ master, workflow-fix ]
+    branches: [ master ]
 jobs:
   compile:
     runs-on: ubuntu-latest
@@ -58,8 +58,6 @@ jobs:
         with:
           name: target-files
           path: urlique-server/target
-      - name: Get directory
-        run: cd ./urlique-server/ && ls
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to private registry
