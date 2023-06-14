@@ -27,6 +27,8 @@ public final class RateLimitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
+        if (this.isPreflightRequest(request)) return;
+
         String forwardedFor = request.getHeader("X-Forwarded-For");
         String ipAddress = forwardedFor == null ? request.getRemoteAddr() : forwardedFor.split(",")[0];
 
@@ -46,6 +48,10 @@ public final class RateLimitFilter extends OncePerRequestFilter {
             response.addHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefill));
             response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(), "You've reached your Request quota.");
         }
+    }
+
+    private boolean isPreflightRequest(HttpServletRequest request) {
+        return "OPTIONS".equals(request.getMethod()) && request.getHeader("Access-Control-Request-Method") != null;
     }
 
 }
