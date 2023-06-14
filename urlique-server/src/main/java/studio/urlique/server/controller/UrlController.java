@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @RestController
@@ -25,13 +24,17 @@ public class UrlController {
 
     @Async
     @GetMapping("/{id}/info") // using "/**" to allow access with slash and without slash
-    public Future<RequestResult<UrlData>> fetch(@PathVariable String id) {
-        return this.urlDataService.fetchUrlDataEntry(id).thenComposeAsync(urlDataRequestResult -> {
-            if (urlDataRequestResult.isSuccess()) {
-                return this.urlDataService.increaseRequests(id);
+    public Future<RequestResult<UrlData>> fetch(@PathVariable String id, @Nullable Principal principal) {
+        return this.urlDataService.fetchUrlDataEntry(id).thenApplyAsync(urlDataRequestResult -> {
+            if (!urlDataRequestResult.isSuccess()) return urlDataRequestResult;
+
+            UrlData urlData = urlDataRequestResult.getResult();
+            if (principal == null || !urlData.equalsCreator(principal.getName())) {
+                this.urlDataService.increaseRequests(id);
+                urlData.increaseRequest();
             }
 
-            return CompletableFuture.completedFuture(urlDataRequestResult);
+            return RequestResult.ok(urlData);
         });
     }
 

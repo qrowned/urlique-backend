@@ -9,6 +9,7 @@ import studio.urlique.api.RequestResult;
 import studio.urlique.api.utils.FutureUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -98,6 +99,30 @@ public class UserService {
 
                     return RequestResult.ok(userRecord);
                 });
+    }
+
+    /**
+     * Get all roles of a certain {@link UserRecord}.
+     *
+     * @param userRecord userRecord object to fetch roles from.
+     * @return parsed roles.
+     */
+    public List<UserRole> getUserRoles(@NotNull UserRecord userRecord) {
+        return ((List<String>) userRecord.getCustomClaims().getOrDefault("roles", new ArrayList<String>()))
+                .stream().map(UserRole::valueOf)
+                .toList();
+    }
+
+    /**
+     * Get the role with the highest priority from a {@link UserRecord}.
+     *
+     * @param userRecord userRecord object to fetch role from.
+     * @return the highest parsed role.
+     */
+    public UserRole getHighestRole(@NotNull UserRecord userRecord) {
+        return this.getUserRoles(userRecord).stream()
+                .min(Comparator.comparingInt(UserRole::getPriority))
+                .orElse(UserRole.USER);
     }
 
 }

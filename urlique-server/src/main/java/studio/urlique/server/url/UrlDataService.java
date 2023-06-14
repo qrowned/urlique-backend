@@ -55,9 +55,9 @@ public final class UrlDataService {
      * @return result of fetch request.
      */
     public CompletableFuture<RequestResult<UrlData>> fetchUrlDataEntry(@NotNull String id) {
-        return this.urlDataFirestoreRepository.get(id).thenApplyAsync(urlDataOptional -> {
-            return urlDataOptional.map(RequestResult::ok).orElseGet(() -> RequestResult.error("url.id.notFound"));
-        });
+        return this.urlDataFirestoreRepository.get(id).thenApplyAsync(urlDataOptional ->
+                urlDataOptional.map(RequestResult::ok).orElseGet(() -> RequestResult.error("url.id.notFound"))
+        );
     }
 
     /**
@@ -97,13 +97,14 @@ public final class UrlDataService {
     }
 
     public CompletableFuture<RequestResult<UrlData>> increaseRequests(@NotNull String id) {
-        return this.fetchUrlDataEntry(id).thenComposeAsync(urlRequest -> {
+        return this.fetchUrlDataEntry(id).thenApplyAsync(urlRequest -> {
+            if (!urlRequest.isSuccess()) return urlRequest;
 
             UrlData urlData = urlRequest.getResult();
             urlData.increaseRequest();
 
             this.urlDataFirestoreRepository.save(urlData);
-            return CompletableFuture.completedFuture(RequestResult.ok(urlData));
+            return RequestResult.ok(urlData);
         });
     }
 
