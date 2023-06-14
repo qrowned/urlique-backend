@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import studio.urlique.api.database.DocumentId;
 
+@Deprecated
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

@@ -11,6 +11,9 @@ import studio.urlique.api.utils.FutureUtils;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Represents a repository to fetch {@link UrlData}.
+ */
 @Repository
 public class UrlDataFirestoreRepository extends AbstractFirestoreRepository<UrlData> {
 

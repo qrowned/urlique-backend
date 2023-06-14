@@ -12,6 +12,10 @@ import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Represents a service for managing any URL related data.
+ * Mostly {@link UrlData}.
+ */
 @Service
 @RequiredArgsConstructor
 public final class UrlDataService {
@@ -19,7 +23,7 @@ public final class UrlDataService {
     private final UrlDataFirestoreRepository urlDataFirestoreRepository;
 
     /**
-     * Create a URL data entry without specific ID.
+     * Create a {@link UrlData} entry without specific ID.
      *
      * @see UrlDataService#createUrlDataEntry(String, String, Principal)
      */
@@ -29,7 +33,7 @@ public final class UrlDataService {
     }
 
     /**
-     * Create a URL data entry with specific ID.
+     * Create a {@link UrlData} entry with specific ID.
      *
      * @param id        specific ID of short link.
      * @param url       URL the short link should point to.
@@ -49,7 +53,7 @@ public final class UrlDataService {
     }
 
     /**
-     * Fetch a URL data entry by its ID.
+     * Fetch a {@link UrlData} entry by its ID.
      *
      * @param id ID of URL data entry.
      * @return result of fetch request.
@@ -61,7 +65,7 @@ public final class UrlDataService {
     }
 
     /**
-     * Fetch all URL data entries of a certain creator.
+     * Fetch all {@link UrlData} entries of a certain creator.
      * To prevent memory overload, a pagination system is implemented.
      *
      * @param creator  creator to get the URL data entries from.
@@ -76,7 +80,7 @@ public final class UrlDataService {
     }
 
     /**
-     * Delete a specific URL data entry.
+     * Delete a specific {@link UrlData} entry.
      *
      * @param id        ID of URL data entry which should be deleted.
      * @param principal identity who executed the request.
@@ -96,6 +100,12 @@ public final class UrlDataService {
         });
     }
 
+    /**
+     * Increase the requests on a certain {@link UrlData} entry.
+     *
+     * @param id the ID of the {@link UrlData}.
+     * @return result of increase request.
+     */
     public CompletableFuture<RequestResult<UrlData>> increaseRequests(@NotNull String id) {
         return this.fetchUrlDataEntry(id).thenApplyAsync(urlRequest -> {
             if (!urlRequest.isSuccess()) return urlRequest;

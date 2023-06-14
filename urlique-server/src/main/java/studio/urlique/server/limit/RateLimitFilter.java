@@ -16,6 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.security.Principal;
 
+/**
+ * Represents a filter to limit the requests of any User/IP-Address.
+ */
 @Component
 @CommonsLog
 @RequiredArgsConstructor

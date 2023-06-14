@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import studio.urlique.api.database.DocumentId;
 
+/**
+ * Represents the data of a URL entry.
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
