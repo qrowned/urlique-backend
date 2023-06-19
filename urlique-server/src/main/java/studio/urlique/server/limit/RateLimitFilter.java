@@ -30,7 +30,10 @@ public final class RateLimitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
-        if (this.isPreflightRequest(request)) return;
+        if (this.isPreflightRequest(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String forwardedFor = request.getHeader("X-Forwarded-For");
         String ipAddress = forwardedFor == null ? request.getRemoteAddr() : forwardedFor.split(",")[0];
