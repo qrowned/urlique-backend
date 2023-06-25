@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 @RestController
@@ -48,15 +49,23 @@ public class UrlController {
 
     @Async
     @PostMapping("/create")
-    public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
+    public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) {
+        try {
+            return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
+        } catch (MalformedURLException exception) {
+            return CompletableFuture.completedFuture(RequestResult.error("url.invalid"));
+        }
     }
 
     @Async
     @PostMapping("/createWithId")
     public Future<RequestResult<UrlData>> create(@RequestParam String id, @RequestParam URI url,
-                                                 @NotNull Principal principal) throws MalformedURLException {
-        return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
+                                                 @NotNull Principal principal) {
+        try {
+            return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
+        } catch (MalformedURLException exception) {
+            return CompletableFuture.completedFuture(RequestResult.error("url.invalid"));
+        }
     }
 
     @Async
