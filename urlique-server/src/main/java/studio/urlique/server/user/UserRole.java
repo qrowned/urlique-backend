@@ -1,12 +1,12 @@
 package studio.urlique.server.user;
 
+import com.google.firebase.auth.UserRecord;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Refill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.Duration;
-import com.google.firebase.auth.UserRecord;
 
 /**
  * Represents a Role of a Firebase {@link UserRecord}.
