@@ -52,7 +52,7 @@ public class UrlController {
     public Future<RequestResult<UrlData>> create(@RequestParam URI url, @Nullable Principal principal) {
         try {
             return this.urlDataService.createUrlDataEntry(url.toURL().toString(), principal);
-        } catch (MalformedURLException exception) {
+        } catch (MalformedURLException | IllegalArgumentException exception) {
             return CompletableFuture.completedFuture(RequestResult.error("url.invalid"));
         }
     }
@@ -63,7 +63,7 @@ public class UrlController {
                                                  @NotNull Principal principal) {
         try {
             return this.urlDataService.createUrlDataEntry(id, url.toURL().toString(), principal);
-        } catch (MalformedURLException exception) {
+        } catch (MalformedURLException | IllegalArgumentException exception) {
             return CompletableFuture.completedFuture(RequestResult.error("url.invalid"));
         }
     }
